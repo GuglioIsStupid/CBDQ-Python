@@ -9,13 +9,11 @@ changes and you're good to go.
 
 - GuglioIsStupid - 2023
 """
-import os, json, tweepy, time, datetime, random, requests, re, sys, dotenv
+import os, json, tweepy, time, datetime, random, requests, re, sys
 
 # Twitter API Keys
 # You will need to include your OWN Twitter API keys in a .env file in the same directory 
 # as this script. You can get your own Twitter API keys at https://developer.twitter.com/
-
-dotenv.load_dotenv()
 
 # get the API keys from the .env file
 consumer_key = os.getenv("consumer_key")
