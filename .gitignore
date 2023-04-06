@@ -1,1 +1,4 @@
 .env
+cred.json
+*.png
+*.jpg
