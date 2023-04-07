@@ -6,6 +6,13 @@ Because of the recent suspension of CBDQ API Access, I am making a script that c
 
 ## [How to host (Via Replit)](host.md)
 
+## How to use
+- Git clone the source code (Or use source download)
+- download all libs needed: `pip install -r requirements.txt`
+- Put your bot.json in `src/` and run the script!
+
+- Note: Not all CBDQ functions are added yet! Please request more features! (Will need an example on how it works so i can implement it)
+
 ## Credits
 - GuglioIsStupid - Me... I made it lol
 - [@devinchaboyer](https://twitter.com/devinchaboyer) - Letting me use [@random_ass_bot](https://twitter.com/random_ass_bot)'s source as a test
