@@ -5,3 +5,7 @@ cred.json
 *.jpeg
 charsenjoyingfood.json
 !unknown.png
+!imgs/2.png
+!imgs/3.png
+!imgs/4.png
+!imgs/5.png
