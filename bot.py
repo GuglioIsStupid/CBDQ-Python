@@ -61,26 +61,9 @@ time_between_tweets = 1800
 botjson = open("bot.json", "r", encoding="utf-8")
 botjson = json.load(botjson)
 
-"""
-Json format:
-{
-    "origin":[
-        "#Character# is testing the bot!",
-        "#Character# and #Character# are both testing the bot!",
-        "#Character# and #Character# are fighting with #Item# and #Item#"
-    ],
-    "Character":[
-        "Goku{img link}"
-    ],
-    "Item":[
-        "Sword{img link}",
-        "Shield{img link}"
-    ]
-}
-"""
-
 while True:
     now = datetime.datetime.now()
+
     # get a random tweet from the origin array
     tweet = random.choice(botjson["origin"])
     blahList = []
@@ -91,7 +74,6 @@ while True:
     # get all the #blah# in the tweet,can also be given as a lowercase
     for blah in re.findall(r"#[a-zA-Z]+#", tweet):
         blahList.append(blah)
-        print(blah)
 
     # replace the #blah# with a random word from the blah array
     for blah in blahList:
@@ -110,14 +92,13 @@ while True:
                     choice = random.choice(botjson[blah[1:-1]])
 
                 tweet = tweet.replace(blah, choice, 1)
-        print(f"Replaced {blah} with {choice}")
+        #print(f"Replaced {blah} with {choice}")
 
     # get all the {img link} in the tweet
     for img in re.findall(r"{img \S+}", tweet):
         imgList.append(img)
         # remove it from the tweet
         tweet = tweet.replace(img, "")
-        print(img)
 
     for img in imgList:
         # download the image w/ requests
@@ -126,10 +107,13 @@ while True:
         image_name = image.split("/")[-1]
         r = requests.get(image, allow_redirects=True)
         try:
-            open(image_name, "wb").write(r.content)
+            try:
+                open(image_name, "wb").write(r.content)
+            except:
+                image_name = "temp.png"
+                open("temp.png", "wb").write(r.content)
         except:
-            image_name = "temp.png"
-            open("temp.png", "wb").write(r.content)
+            image_name = "unknown.png"
 
         # upload the image to twitter
         media = api.media_upload(image_name)

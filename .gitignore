@@ -4,3 +4,4 @@ cred.json
 *.jpg
 *.jpeg
 charsenjoyingfood.json
+!unknown.png
