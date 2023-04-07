@@ -31,9 +31,18 @@ Client = tweepy.Client(bearer_token=bearer_token,
                        access_token=access_token, 
                        access_token_secret=access_token_secret
 )
+auth = tweepy.OAuth1UserHandler(
+    consumer_key,
+    consumer_secret,
+    access_token,
+    access_token_secret
+)
+# for media upload
+api = tweepy.API(auth)
 
 # Verify Credentials
 try:
+    api.verify_credentials()
     print("Authentication OK")
 except:
     print("Error during authentication")
@@ -48,7 +57,7 @@ now = datetime.datetime.now()
 time_between_tweets = 3600
 
 # read bot.json
-botjson = open("bot.json", "r")
+botjson = open("bot.json", "r", encoding="utf-8")
 botjson = json.load(botjson)
 
 """
@@ -65,24 +74,55 @@ Json format:
 """
 
 while True:
+    now = datetime.datetime.now()
     # get a random tweet from the origin array
     tweet = random.choice(botjson["origin"])
+    charList = []
 
     # get all the characters in the tweet
     characters = re.findall(r"#(.*?)#", tweet)
+    print(len(characters))
+    
 
     # replace all the characters with a random character from the json
     for character in characters:
-        tweet = tweet.replace(f"#{character}#", random.choice(botjson[character]))
+        # get a random character from the json that isn't already in the tweet
+        char = random.choice(botjson[character])
+        print(char)
+        while char in charList:
+            char = random.choice(botjson[character])
+            print(char)
+        charList.append(char)
 
+        # replace the character in the tweet
+        tweet = tweet.replace(f"#{character}#", char)
+    #break # for testing
     # get all the images in the tweet
     images = re.findall(r"{img (.*?)}", tweet)
     mediaIDs = []
 
     for image in images:
-        print(image)
-        # get the media ID from the tweet
-        tweet.replace(f"{{img {image}}}", "")
+        # download the image with requests
+        r = requests.get(image)
+        # get the image name
+        image_name = image.split("/")[-1]
+        print(image_name)
+        # write the image to a file
+        try:
+            with open(image_name, "wb") as f:
+                f.write(r.content)
+        except:
+            # name it temp.png
+            image_name = "temp.png"
+            with open(image_name, "wb") as f:
+                f.write(r.content)
+        
+        # upload the image to twitter
+        media = api.media_upload(image_name)
+        mediaIDs.append(media.media_id)
+
+        # replace the image link with nothing
+        tweet = tweet.replace(f"{{img {image}}}", "")
 
     # Since you can't upload images to twitter with API v2, use media ID's instead of links
     # get the tweet length
@@ -90,10 +130,12 @@ while True:
 
     # tweet the tweet
     try:
-        Client.create_tweet(text=tweet, media_ids=[16_1211797899316740096])
+        Client.create_tweet(text=tweet, media_ids=mediaIDs)
         print(f"Tweeted: {tweet}")
     except:
         print(f"Tweet failed: {tweet}")
+        # print the error
+        print(sys.exc_info()[0])
 
     # delete the images
     for image in images:
