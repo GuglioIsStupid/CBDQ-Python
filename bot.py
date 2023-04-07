@@ -65,10 +65,15 @@ Json format:
 {
     "origin":[
         "#Character# is testing the bot!",
-        "#Character# and #Character# are both testing the bot!"
+        "#Character# and #Character# are both testing the bot!",
+        "#Character# and #Character# are fighting with #Item# and #Item#"
     ],
     "Character":[
-        "Goku{img media_id}"
+        "Goku{img link}"
+    ],
+    "Item":[
+        "Sword{img link}",
+        "Shield{img link}"
     ]
 }
 """
@@ -77,52 +82,65 @@ while True:
     now = datetime.datetime.now()
     # get a random tweet from the origin array
     tweet = random.choice(botjson["origin"])
-    charList = []
+    blahList = []
     mediaIDs = []
+    imgList = []
+    otherList = []
 
-    # get all the characters in the tweet
-    characters = re.findall(r"#(.*?)#", tweet)
-    
-    # replace all the characters with a random character from the json
-    for character in characters:
-        # get a random character from the json that isn't already in the tweet
-        char = random.choice(botjson[character])
-        while char in charList:
-            char = random.choice(botjson[character])
+    # get all the #blah# in the tweet,can also be given as a lowercase
+    for blah in re.findall(r"#[a-zA-Z]+#", tweet):
+        blahList.append(blah)
+        print(blah)
 
-        # replace the character in the tweet
-        tweet = tweet.replace(f"#{character}#", char)
-        charList.append(char)
-        #print(charList)
-    #break # for testing
+    # replace the #blah# with a random word from the blah array
+    for blah in blahList:
+        choice = random.choice(botjson[blah[1:-1]])
+        otherList.append(choice)
+        while choice in otherList:
+            choice = random.choice(botjson[blah[1:-1]])
 
-    for image in charList:
-        # get the image name
-        # the image goes after character name,
-        # E.g. Goku{img https://example.com/image.png}
-        image = image.split("{img ")[1]
+        tweet = tweet.replace(blah, choice, 1)
+        # check if theres another #blah# in the tweet, can be character, item, etc
+        if re.search(r"#[a-zA-Z]+#", tweet):
+            for blah in re.findall(r"#[a-zA-Z]+#", tweet):
+                choice = random.choice(botjson[blah[1:-1]])
+                otherList.append(choice)
+                while choice in otherList:
+                    choice = random.choice(botjson[blah[1:-1]])
+
+                tweet = tweet.replace(blah, choice, 1)
+        print(f"Replaced {blah} with {choice}")
+
+    # get all the {img link} in the tweet
+    for img in re.findall(r"{img \S+}", tweet):
+        imgList.append(img)
+        # remove it from the tweet
+        tweet = tweet.replace(img, "")
+        print(img)
+
+    for img in imgList:
+        # download the image w/ requests
+        image = img.split("{img ")[1]
         image = image.split("}")[0]
-        
-        # download the image with requests
         image_name = image.split("/")[-1]
-        image_data = requests.get(image).content
-        with open(image_name, "wb") as handler:
-            handler.write(image_data)
+        r = requests.get(image, allow_redirects=True)
+        try:
+            open(image_name, "wb").write(r.content)
+        except:
+            image_name = "temp.png"
+            open("temp.png", "wb").write(r.content)
 
         # upload the image to twitter
         media = api.media_upload(image_name)
+        print(f"Uploaded image: {image_name}")
         mediaIDs.append(media.media_id)
 
-        # replace the image link with nothing
-        tweet = tweet.replace(f"{{img {image}}}", "")
-
-    # Since you can't upload images to twitter with API v2, use media ID's instead of links
-    # get the tweet length
-    tweet_length = len(tweet)
+        # replace the {img link} with nothing
+        tweet = tweet.replace(img, "")
 
     # tweet the tweet
     try:
-        #Client.create_tweet(text=tweet, media_ids=mediaIDs)
+        Client.create_tweet(text=tweet, media_ids=mediaIDs)
         print(f"Tweeted: {tweet}")
     except:
         print(f"Tweet failed: {tweet}")
@@ -130,7 +148,7 @@ while True:
         print(sys.exc_info()[0])
 
     # delete the images
-    for image in charList:
+    for image in imgList:
         image = image.split("{img ")[1]
         image = image.split("}")[0]
         image_name = image.split("/")[-1]
