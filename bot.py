@@ -78,45 +78,37 @@ while True:
     # get a random tweet from the origin array
     tweet = random.choice(botjson["origin"])
     charList = []
+    mediaIDs = []
 
     # get all the characters in the tweet
     characters = re.findall(r"#(.*?)#", tweet)
-    print(len(characters))
     
-
     # replace all the characters with a random character from the json
     for character in characters:
         # get a random character from the json that isn't already in the tweet
         char = random.choice(botjson[character])
-        print(char)
         while char in charList:
             char = random.choice(botjson[character])
-            print(char)
-        charList.append(char)
 
         # replace the character in the tweet
         tweet = tweet.replace(f"#{character}#", char)
+        charList.append(char)
+        #print(charList)
     #break # for testing
-    # get all the images in the tweet
-    images = re.findall(r"{img (.*?)}", tweet)
-    mediaIDs = []
 
-    for image in images:
-        # download the image with requests
-        r = requests.get(image)
+    for image in charList:
         # get the image name
-        image_name = image.split("/")[-1]
-        print(image_name)
-        # write the image to a file
-        try:
-            with open(image_name, "wb") as f:
-                f.write(r.content)
-        except:
-            # name it temp.png
-            image_name = "temp.png"
-            with open(image_name, "wb") as f:
-                f.write(r.content)
+        # the image goes after character name,
+        # E.g. Goku{img https://example.com/image.png}
+        image = image.split("{img ")[1]
+        image = image.split("}")[0]
         
+        # download the image with requests
+        image_name = image.split("/")[-1]
+        image_data = requests.get(image).content
+        with open(image_name, "wb") as handler:
+            handler.write(image_data)
+
         # upload the image to twitter
         media = api.media_upload(image_name)
         mediaIDs.append(media.media_id)
@@ -130,7 +122,7 @@ while True:
 
     # tweet the tweet
     try:
-        Client.create_tweet(text=tweet, media_ids=mediaIDs)
+        #Client.create_tweet(text=tweet, media_ids=mediaIDs)
         print(f"Tweeted: {tweet}")
     except:
         print(f"Tweet failed: {tweet}")
@@ -138,9 +130,17 @@ while True:
         print(sys.exc_info()[0])
 
     # delete the images
-    for image in images:
-        #os.remove(image)
-        pass
+    for image in charList:
+        image = image.split("{img ")[1]
+        image = image.split("}")[0]
+        image_name = image.split("/")[-1]
+        try:
+            os.remove(image_name)
+        except:
+            try:
+                os.remove("temp.png")
+            except:
+                print("Couldn't delete image; it probably doesn't exist")
 
     # wait for the time between tweets
     time.sleep(time_between_tweets)
