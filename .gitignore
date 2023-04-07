@@ -4,6 +4,8 @@ cred.json
 *.jpg
 *.jpeg
 charsenjoyingfood.json
+randomassbot.json
+bot-ignore.json
 !unknown.png
 !imgs/2.png
 !imgs/3.png

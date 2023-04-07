@@ -82,6 +82,7 @@ while True:
     mediaIDs = []
     imgList = []
     otherList = []
+    videoList = []
 
     # get all the #blah# in the tweet,can also be given as a lowercase
     for blah in re.findall(r"#[a-zA-Z]+#", tweet):
@@ -112,6 +113,12 @@ while True:
         # remove it from the tweet
         tweet = tweet.replace(img, "")
 
+    # get all the {vid link} in the tweet
+    for vid in re.findall(r"{vid \S+}", tweet):
+        videoList.append(vid)
+        # remove it from the tweet
+        tweet = tweet.replace(vid, "")
+
     for img in imgList:
         # download the image w/ requests
         image = img.split("{img ")[1]
@@ -135,6 +142,29 @@ while True:
         # replace the {img link} with nothing
         tweet = tweet.replace(img, "")
 
+    for vid in videoList:
+        # download the video w/ requests
+        video = vid.split("{vid ")[1]
+        video = video.split("}")[0]
+        video_name = video.split("/")[-1]
+        r = requests.get(video, allow_redirects=True)
+        try:
+            try:
+                open(video_name, "wb").write(r.content)
+            except:
+                video_name = "temp.mp4"
+                open("temp.mp4", "wb").write(r.content)
+        except:
+            video_name = "unknown.mp4"
+
+        # upload the video to twitter
+        media = api.media_upload(video_name)
+        print(f"Uploaded video: {video_name}")
+        mediaIDs.append(media.media_id)
+
+        # replace the {vid link} with nothing
+        tweet = tweet.replace(vid, "")
+
     # tweet the tweet
     try:
         Client.create_tweet(text=tweet, media_ids=mediaIDs)
@@ -156,6 +186,19 @@ while True:
                 os.remove("temp.png")
             except:
                 print("Couldn't delete image; it probably doesn't exist")
+
+    # delete the videos
+    for video in videoList:
+        video = video.split("{vid ")[1]
+        video = video.split("}")[0]
+        video_name = video.split("/")[-1]
+        try:
+            os.remove(video_name)
+        except:
+            try:
+                os.remove("temp.mp4")
+            except:
+                print("Couldn't delete video; it probably doesn't exist")
 
     # wait for the time between tweets
     time.sleep(time_between_tweets)
