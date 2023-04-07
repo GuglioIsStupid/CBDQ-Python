@@ -9,7 +9,7 @@ changes and you're good to go.
 
 - GuglioIsStupid - 2023
 """
-import os, json, tweepy, time, datetime, random, requests, re, sys
+import os, json, tweepy, time, datetime, random, requests, re, sys, dotenv
 
 # Twitter API Keys
 # You will need to include your OWN Twitter API keys in a .env file in the same directory 
@@ -23,6 +23,19 @@ consumer_secret = credjson["consumer_secret"]
 access_token = credjson["access_token"]
 access_token_secret = credjson["access_token_secret"]
 bearer_token = credjson["bearer_token"]
+
+# if any of the keys are missing, get them from the .env file
+dotenv.load_dotenv()
+if consumer_key == "":
+    consumer_key = os.getenv("consumer_key")
+if consumer_secret == "":
+    consumer_secret = os.getenv("consumer_secret")
+if access_token == "":
+    access_token = os.getenv("access_token")
+if access_token_secret == "":
+    access_token_secret = os.getenv("access_token_secret")
+if bearer_token == "":
+    bearer_token = os.getenv("bearer_token")
 
 # Use twitter api V2
 Client = tweepy.Client(bearer_token=bearer_token, 
