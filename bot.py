@@ -53,8 +53,9 @@ now = datetime.datetime.now()
 
 # The time between every new tweet
 # This is in seconds, so 3600 is 1 hour
-# You can change this to whatever you want, but I recommend keeping it at 3600
-time_between_tweets = 3600
+# Default is 30 minutes
+# You can change this to whatever you want, but I recommend keeping it at 30 minutes
+time_between_tweets = 1800
 
 # read bot.json
 botjson = open("bot.json", "r", encoding="utf-8")
