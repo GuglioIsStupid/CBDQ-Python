@@ -9,7 +9,7 @@ changes and you're good to go.
 
 - GuglioIsStupid - 2023
 """
-import os, json, tweepy, time, datetime, random, requests, re, sys, dotenv
+import os, json, tweepy, time, datetime, random, requests, re, sys
 
 # Twitter API Keys
 # You will need to include your OWN Twitter API keys in a .env file in the same directory 
@@ -25,7 +25,6 @@ access_token_secret = credjson["access_token_secret"]
 bearer_token = credjson["bearer_token"]
 
 # if any of the keys are missing, get them from the .env file
-dotenv.load_dotenv()
 if consumer_key == "":
     consumer_key = os.getenv("consumer_key")
 if consumer_secret == "":
