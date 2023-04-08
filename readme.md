@@ -17,6 +17,7 @@ Because of the recent suspension of CBDQ API Access, I am making a script that c
 
 ## Credits
 - [@GuglioIsStupid](https://twitter.com/GuglioIs2Stupid) - Me... I made it lol
-- [@devinchaboyer](https://twitter.com/devinchaboyer) - Letting me use [@random_ass_bot](https://twitter.com/random_ass_bot)'s source as a test
-- [@Blake_Hatsune](https://twitter.com/Blake_Hatsune) - Letting me use [@CharEnjoyFood](https://twitter.com/CharEnjoyFood)'s source as a test
+- [@devinchaboyer](https://twitter.com/devinchaboyer) - Letting me use [@random_ass_bot](https://twitter.com/random_ass_bot)'s source as a test (Basic quote randomization)
+- [@Blake_Hatsune](https://twitter.com/Blake_Hatsune) - Letting me use [@CharEnjoyFood](https://twitter.com/CharEnjoyFood)'s source as a test (Quotes in quotes)
+- [@zeroarmsgrani](https://twitter.com/zeroarmsgrani) - Letting me use [@robokybot](https://twitter.com/robokybot)'s source as a test (Videos)
 - [@v21](https://twitter.com/v21) - For Cheap Bots Done Quick! Without it, this project wouldn't exist
