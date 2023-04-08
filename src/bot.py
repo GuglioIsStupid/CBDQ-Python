@@ -212,7 +212,10 @@ while True:
     # tweet the tweet
     try:
         try:
-            Client.create_tweet(text=tweet, media_ids=mediaIDs)
+            if len(mediaIDs) == 0:
+                Client.create_tweet(text=tweet)
+            else:
+                Client.create_tweet(text=tweet, media_ids=mediaIDs)
         except:
             # keep generating tweets until it works
             while True:
