@@ -73,16 +73,27 @@ time_between_tweets = 1800
 botjson = open("bot.json", "r", encoding="utf-8")
 botjson = json.load(botjson)
 
-while True:
-    now = datetime.datetime.now()
+global blahList
+global mediaIDs
+global imgList
+global otherList
+global videoList
+blahList = []
+mediaIDs = []
+imgList = []
+otherList = []
+videoList = []
 
-    # get a random tweet from the origin array
+def resetLists():
+    blahList.clear()
+    mediaIDs.clear()
+    imgList.clear()
+    otherList.clear()
+    videoList.clear()
+
+def generateTweet():
     tweet = random.choice(botjson["origin"])
-    blahList = []
-    mediaIDs = []
-    imgList = []
-    otherList = []
-    videoList = []
+    resetLists()
 
     # get all the #blah# in the tweet,can also be given as a lowercase
     for blah in re.findall(r"#[a-zA-Z]+#", tweet):
@@ -135,7 +146,11 @@ while True:
             image_name = "unknown.png"
 
         # upload the image to twitter
-        media = api.media_upload(image_name)
+        try:
+            media = api.media_upload(image_name)
+        except:
+            image_name = "unknown.png"
+            media = api.media_upload(image_name)
         print(f"Uploaded image: {image_name}")
         mediaIDs.append(media.media_id)
 
@@ -165,9 +180,27 @@ while True:
         # replace the {vid link} with nothing
         tweet = tweet.replace(vid, "")
 
+    return tweet
+
+while True:
+    now = datetime.datetime.now()
+
+    # get a random tweet from the origin array
+    tweet = generateTweet()
+
     # tweet the tweet
     try:
-        Client.create_tweet(text=tweet, media_ids=mediaIDs)
+        try:
+            Client.create_tweet(text=tweet, media_ids=mediaIDs)
+        except:
+            # keep generating tweets until it works
+            while True:
+                tweet = generateTweet()
+                try:
+                    Client.create_tweet(text=tweet, media_ids=mediaIDs)
+                    break
+                except:
+                    pass
         print(f"Tweeted: {tweet}")
     except:
         print(f"Tweet failed: {tweet}")

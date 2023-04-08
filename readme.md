@@ -13,8 +13,10 @@ Because of the recent suspension of CBDQ API Access, I am making a script that c
 
 - Note: Not all CBDQ functions are added yet! Please request more features! (Will need an example on how it works so i can implement it)
 
+### For support; Join the [Discord Server](https://discord.com/invite/ehY5gMMPW8)!
+
 ## Credits
-- GuglioIsStupid - Me... I made it lol
+- [@GuglioIsStupid](https://twitter.com/GuglioIs2Stupid) - Me... I made it lol
 - [@devinchaboyer](https://twitter.com/devinchaboyer) - Letting me use [@random_ass_bot](https://twitter.com/random_ass_bot)'s source as a test
 - [@Blake_Hatsune](https://twitter.com/Blake_Hatsune) - Letting me use [@CharEnjoyFood](https://twitter.com/CharEnjoyFood)'s source as a test
 - [@v21](https://twitter.com/v21) - For Cheap Bots Done Quick! Without it, this project wouldn't exist
