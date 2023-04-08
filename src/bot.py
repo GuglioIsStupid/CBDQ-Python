@@ -218,7 +218,7 @@ while True:
             while True:
                 tweet = generateTweet()
                 try:
-                    Client.create_tweet(text=tweet, media_ids=mediaIDsss)
+                    Client.create_tweet(text=tweet, media_ids=mediaIDs)
                     break
                 except:
                     # if error is <tweepy.errors.BadRequest>
