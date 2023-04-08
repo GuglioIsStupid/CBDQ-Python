@@ -235,7 +235,7 @@ while True:
                 except:
                     # if error is <tweepy.errors.BadRequest>
                     # print possible error
-                    if sys.exc_info()[0] == tweepy.error.BadRequest:
+                    if sys.exc_info()[0] == tweepy.errors.BadRequest:
                         print("""
 Possible error!
     1. Tweet is too long
