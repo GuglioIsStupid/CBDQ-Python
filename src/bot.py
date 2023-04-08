@@ -24,6 +24,17 @@ access_token = credjson["access_token"]
 access_token_secret = credjson["access_token_secret"]
 bearer_token = credjson["bearer_token"]
 
+cur_version = "1.0.3"
+# get version in github repo from version.txt 
+try:
+    r = requests.get("https://raw.githubusercontent.com/GuglioIsStupid/CBDQ-Python/master/version.txt")
+    if r.status_code == 200:
+        version = r.text
+        if version != cur_version:
+            print(f"New version available: {version}")
+            print("Download it at https://github.com/GuglioIsStupid/CBDQ-Python")
+except:
+    print("Couldn't get version from github")
 # if any of the keys are missing, get them from the .env file
 if consumer_key == "":
     consumer_key = os.getenv("consumer_key")
@@ -183,6 +194,16 @@ def generateTweet():
     return tweet
 
 while True:
+    try:
+        # Check github version for every tweet
+        r = requests.get("https://raw.githubusercontent.com/GuglioIsStupid/CBDQ-Python/master/version.txt")
+        if r.status_code == 200:
+            version = r.text
+            if version != cur_version:
+                print(f"New version available: {version}")
+                print("Download it at https://github.com/GuglioIsStupid/CBDQ-Python")
+    except:
+        print("Couldn't get version from github")
     now = datetime.datetime.now()
 
     # get a random tweet from the origin array
