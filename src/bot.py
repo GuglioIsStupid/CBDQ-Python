@@ -96,7 +96,7 @@ def generateTweet():
     resetLists()
 
     # get all the #blah# in the tweet,can also be given as a lowercase
-    for blah in re.findall(r"#[a-zA-Z]+#", tweet):
+    for blah in re.findall(r"#[a-zA-Z0-9]+#", tweet):
         blahList.append(blah)
 
     # replace the #blah# with a random word from the blah array
@@ -108,8 +108,8 @@ def generateTweet():
 
         tweet = tweet.replace(blah, choice, 1)
         # check if theres another #blah# in the tweet, can be character, item, etc
-        if re.search(r"#[a-zA-Z]+#", tweet):
-            for blah in re.findall(r"#[a-zA-Z]+#", tweet):
+        if re.findall(r"#[a-zA-Z0-9]+#", tweet):
+            for blah in re.findall(r"#[a-zA-Z0-9]+#", tweet):
                 choice = random.choice(botjson[blah[1:-1]])
                 otherList.append(choice)
                 while choice in otherList:
