@@ -197,9 +197,18 @@ while True:
             while True:
                 tweet = generateTweet()
                 try:
-                    Client.create_tweet(text=tweet, media_ids=mediaIDs)
+                    Client.create_tweet(text=tweet, media_ids=mediaIDsss)
                     break
                 except:
+                    # if error is <tweepy.errors.BadRequest>
+                    # print possible error
+                    if sys.exc_info()[0] == tweepy.error.BadRequest:
+                        print("""
+Possible error!
+    1. Tweet is too long
+    2. Tweet is a duplicate
+    3. API key is invalid
+                        """)
                     pass
         print(f"Tweeted: {tweet}")
     except:
