@@ -24,7 +24,7 @@ access_token = credjson["access_token"]
 access_token_secret = credjson["access_token_secret"]
 bearer_token = credjson["bearer_token"]
 
-cur_version = "1.0.3"
+cur_version = "1.0.4"
 # get version in github repo from version.txt 
 try:
     r = requests.get("https://raw.githubusercontent.com/GuglioIsStupid/CBDQ-Python/master/version.txt")
