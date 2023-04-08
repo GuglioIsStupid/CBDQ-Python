@@ -243,7 +243,13 @@ Possible error!
     2. Tweet is a duplicate
     3. API key is invalid
                         """)
-                    pass
+                        pass
+                    elif sys.exc_info()[0] == tweepy.errors.Forbidden:
+                        print("""
+Possible error!
+    1. API key is invalid
+                        """)
+                        sys.exit()
         print(f"Tweeted: {tweet}")
     except:
         print(f"Tweet failed: {tweet}")
