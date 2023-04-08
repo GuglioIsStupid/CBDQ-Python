@@ -235,6 +235,7 @@ while True:
                 except:
                     # if error is <tweepy.errors.BadRequest>
                     # print possible error
+                    print("Error: ", sys.exc_info()[0])
                     if sys.exc_info()[0] == tweepy.errors.BadRequest:
                         print("""
 Possible error!
