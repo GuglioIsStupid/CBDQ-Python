@@ -113,18 +113,20 @@ def generateTweet():
     # replace the #blah# with a random word from the blah array
     for blah in blahList:
         choice = random.choice(botjson[blah[1:-1]])
-        otherList.append(choice)
+        
         while choice in otherList:
             choice = random.choice(botjson[blah[1:-1]])
+        otherList.append(choice)
 
         tweet = tweet.replace(blah, choice, 1)
         # check if theres another #blah# in the tweet, can be character, item, etc
         if re.findall(r"#[a-zA-Z0-9]+#", tweet):
             for blah in re.findall(r"#[a-zA-Z0-9]+#", tweet):
                 choice = random.choice(botjson[blah[1:-1]])
-                otherList.append(choice)
+                
                 while choice in otherList:
                     choice = random.choice(botjson[blah[1:-1]])
+                otherList.append(choice)
 
                 tweet = tweet.replace(blah, choice, 1)
         #print(f"Replaced {blah} with {choice}")
