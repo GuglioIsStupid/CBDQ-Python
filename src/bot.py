@@ -148,6 +148,10 @@ def generateTweet():
         image = img.split("{img ")[1]
         image = image.split("}")[0]
         image_name = image.split("/")[-1]
+        # sometimes the image link can have a query string, so we need to remove it
+        if "?" in image_name:
+            image_name = image_name.split("?")[0]
+
         r = requests.get(image, allow_redirects=True)
         try:
             try:
@@ -175,6 +179,9 @@ def generateTweet():
         video = vid.split("{vid ")[1]
         video = video.split("}")[0]
         video_name = video.split("/")[-1]
+        # sometimes the video link can have a query string, so we need to remove it
+        if "?" in video_name:
+            video_name = video_name.split("?")[0]
         r = requests.get(video, allow_redirects=True)
         try:
             try:
