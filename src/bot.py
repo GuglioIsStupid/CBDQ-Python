@@ -16,25 +16,25 @@ import os, json, tweepy, time, datetime, random, requests, re, sys
 # as this script. You can get your own Twitter API keys at https://developer.twitter.com/
 
 # get the API keys from the cred.json file
-credjson = open("cred.json", "r")
-credjson = json.load(credjson)
-consumer_key = credjson["consumer_key"]
-consumer_secret = credjson["consumer_secret"]
-access_token = credjson["access_token"]
-access_token_secret = credjson["access_token_secret"]
-bearer_token = credjson["bearer_token"]
+# check if the cred.json file exists
+if os.path.exists("cred.json"):
+    credjson = open("cred.json", "r")
+    credjson = json.load(credjson)
+    consumer_key = credjson["consumer_key"]
+    consumer_secret = credjson["consumer_secret"]
+    access_token = credjson["access_token"]
+    access_token_secret = credjson["access_token_secret"]
+    bearer_token = credjson["bearer_token"]
+    print("Using cred.json file for API keys")
+else:
+    consumer_key = os.getenv("consumer_key")
+    consumer_secret = os.getenv("consumer_secret")
+    access_token = os.getenv("access_token")
+    access_token_secret = os.getenv("access_token_secret")
+    bearer_token = os.getenv("bearer_token")
+    print("Using .env file for API keys")
 
 cur_version = "1.0.4"
-# get version in github repo from version.txt 
-try:
-    r = requests.get("https://raw.githubusercontent.com/GuglioIsStupid/CBDQ-Python/master/version.txt")
-    if r.status_code == 200:
-        version = r.text
-        if version != cur_version:
-            print(f"New version available: {version}")
-            print("Download it at https://github.com/GuglioIsStupid/CBDQ-Python")
-except:
-    print("Couldn't get version from github")
 # if any of the keys are missing, get them from the .env file
 if consumer_key == "":
     consumer_key = os.getenv("consumer_key")
@@ -54,11 +54,10 @@ Client = tweepy.Client(bearer_token=bearer_token,
                        access_token=access_token, 
                        access_token_secret=access_token_secret
 )
-auth = tweepy.OAuth1UserHandler(
-    consumer_key,
-    consumer_secret,
-    access_token,
-    access_token_secret
+auth = tweepy.OAuth1UserHandler(consumer_key,
+                                consumer_secret,
+                                access_token,
+                                access_token_secret
 )
 # for media upload
 api = tweepy.API(auth)
@@ -71,13 +70,10 @@ except:
     print("Error during authentication")
     sys.exit()
 
-# Get the current time
-now = datetime.datetime.now()
-
 # The time between every new tweet
 # This is in seconds, so 3600 is 1 hour
 # Default is 30 minutes
-# You can change this to whatever you want, but I recommend keeping it at 30 minutes
+# You can change this to whatever you want, but I recommend keeping it at 30-60 minutes
 time_between_tweets = 1800
 
 # read bot.json
@@ -213,7 +209,6 @@ while True:
                 print("Download it at https://github.com/GuglioIsStupid/CBDQ-Python")
     except:
         print("Couldn't get version from github")
-    now = datetime.datetime.now()
 
     # get a random tweet from the origin array
     tweet = generateTweet()
