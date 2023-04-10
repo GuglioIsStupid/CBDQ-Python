@@ -256,6 +256,9 @@ Possible error!
         image = image.split("{img ")[1]
         image = image.split("}")[0]
         image_name = image.split("/")[-1]
+        # sometimes the image link can have a query string, so we need to remove it
+        if "?" in image_name:
+            image_name = image_name.split("?")[0]
         try:
             os.remove(image_name)
         except:
@@ -269,6 +272,9 @@ Possible error!
         video = video.split("{vid ")[1]
         video = video.split("}")[0]
         video_name = video.split("/")[-1]
+        # sometimes the video link can have a query string, so we need to remove it
+        if "?" in video_name:
+            video_name = video_name.split("?")[0]
         try:
             os.remove(video_name)
         except:
