@@ -34,7 +34,7 @@ else:
     bearer_token = os.getenv("bearer_token")
     print("Using .env file for API keys")
 
-cur_version = "1.0.4"
+cur_version = "1.0.5"
 # if any of the keys are missing, get them from the .env file
 if consumer_key == "":
     consumer_key = os.getenv("consumer_key")
