@@ -27,3 +27,6 @@ bot-ignore.json
 # Replit specific files
 main.py
 keep_alive.py
+
+# Release files
+*.zip
