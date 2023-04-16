@@ -60,7 +60,7 @@ auth = tweepy.OAuth1UserHandler(consumer_key,
                                 access_token_secret
 )
 # for media upload
-api = tweepy.API(auth)
+api = tweepy.API(auth, wait_on_rate_limit=True)
 
 # Verify Credentials
 try:
@@ -102,7 +102,7 @@ def generateTweet():
     tweet = random.choice(botjson["origin"])
     resetLists()
 
-    # get all the #blah# in the tweet,can also be given as a lowercase
+    # get all the #blah# in the tweet,can also be given as a lowercase, uppercase, mixed, spaces, symbols, numbers, etc
     for blah in re.findall(r"#[a-zA-Z0-9]+#", tweet):
         blahList.append(blah)
 
