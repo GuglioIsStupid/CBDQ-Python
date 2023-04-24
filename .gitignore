@@ -10,6 +10,12 @@ cred.json
 *.svg
 *.webp
 
+# bot videos
+*.mp4
+*.mov
+*.avi
+*.mkv
+
 # Personal testing files
 charsenjoyingfood.json
 randomassbot.json

@@ -9,7 +9,7 @@ changes and you're good to go.
 
 - GuglioIsStupid - 2023
 """
-import os, json, tweepy, time, datetime, random, requests, re, sys
+import os, json, tweepy, time, random, requests, re, sys
 
 # Twitter API Keys
 # You will need to include your OWN Twitter API keys in a .env file in the same directory 
@@ -34,7 +34,7 @@ else:
     bearer_token = os.getenv("bearer_token")
     print("Using .env file for API keys")
 
-cur_version = "1.0.5"
+cur_version = "1.0.6"
 # if any of the keys are missing, get them from the .env file
 if consumer_key == "":
     consumer_key = os.getenv("consumer_key")
@@ -102,7 +102,7 @@ def generateTweet():
     tweet = random.choice(botjson["origin"])
     resetLists()
 
-    # get all the #blah# in the tweet,can also be given as a lowercase, uppercase, mixed, spaces, symbols, numbers, etc
+    # get all the #blah# in the tweet,can also be given as a lowercase, uppercase, numbers, special characters, spaces, etc
     for blah in re.findall(r"#[a-zA-Z0-9]+#", tweet):
         blahList.append(blah)
 
@@ -242,7 +242,7 @@ Possible error!
                     elif sys.exc_info()[0] == tweepy.errors.Forbidden:
                         print("""
 Possible error!
-    1. API key is invalid
+    1. API key doesn't have permission to tweet | check if it's read-only
                         """)
                         sys.exit()
         print(f"Tweeted: {tweet}")
