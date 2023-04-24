@@ -90,6 +90,7 @@ mediaIDs = []
 imgList = []
 otherList = []
 videoList = []
+numList = []
 
 def resetLists():
     blahList.clear()
@@ -97,6 +98,7 @@ def resetLists():
     imgList.clear()
     otherList.clear()
     videoList.clear()
+    numList.clear()
 
 def generateTweet():
     tweet = random.choice(botjson["origin"])
@@ -138,6 +140,18 @@ def generateTweet():
         videoList.append(vid)
         # remove it from the tweet
         tweet = tweet.replace(vid, "")
+
+    # {rand 1, 10} will give a random number between 1 and 10
+    for num in re.findall(r"{rand \d+, \d+}", tweet):
+        # generate a random number between the two numbers
+        min_num = int(num.split(", ")[0].split("{rand ")[1])
+        max_num = int(num.split(", ")[1].split("}")[0])
+        num = random.randint(min_num, max_num)
+        numList.append(num)
+        # replace the {rand 1, 10} with the random number
+        tweet = tweet.replace(f"{min_num}, {max_num}", str(num), 1)
+        tweet = tweet.replace("{rand ", "")
+        tweet = tweet.replace("}", "")
 
     for img in imgList:
         # download the image w/ requests
