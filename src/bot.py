@@ -146,12 +146,10 @@ def generateTweet():
         # generate a random number between the two numbers
         min_num = int(num.split(", ")[0].split("{rand ")[1])
         max_num = int(num.split(", ")[1].split("}")[0])
-        num = random.randint(min_num, max_num)
-        numList.append(num)
+        num_n = random.randint(min_num, max_num)
+        numList.append(num_n)
         # replace the {rand 1, 10} with the random number
-        tweet = tweet.replace(f"{min_num}, {max_num}", str(num), 1)
-        tweet = tweet.replace("{rand ", "")
-        tweet = tweet.replace("}", "")
+        tweet = tweet.replace(num, str(num_n), 1)
 
     for img in imgList:
         # download the image w/ requests
