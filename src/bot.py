@@ -198,91 +198,93 @@ def generateTweet():
 
     return tweet
 
+now = time.time()
 while True:
-    try:
-        # Check github version for every tweet
-        r = requests.get("https://raw.githubusercontent.com/GuglioIsStupid/CBDQ-Python/master/version.txt")
-        if r.status_code == 200:
-            version = r.text
-            if version != cur_version:
-                print(f"New version available: {version}")
-                print("Download it at https://github.com/GuglioIsStupid/CBDQ-Python")
-    except:
-        print("Couldn't get version from github")
-
-    # get a random tweet from the origin array
-    tweet = generateTweet()
-
-    # tweet the tweet
-    try:
+    timer = time.time()
+    if timer - now >= time_between_tweets:
         try:
-            if len(mediaIDs) == 0:
-                Client.create_tweet(text=tweet)
-            else:
-                Client.create_tweet(text=tweet, media_ids=mediaIDs)
+            # Check github version for every tweet
+            r = requests.get("https://raw.githubusercontent.com/GuglioIsStupid/CBDQ-Python/master/version.txt")
+            if r.status_code == 200:
+                version = r.text
+                if version != cur_version:
+                    print(f"New version available: {version}")
+                    print("Download it at https://github.com/GuglioIsStupid/CBDQ-Python")
         except:
-            # keep generating tweets until it works
-            while True:
-                tweet = generateTweet()
-                try:
+            print("Couldn't get version from github")
+
+        # get a random tweet from the origin array
+        tweet = generateTweet()
+
+        # tweet the tweet
+        try:
+            try:
+                if len(mediaIDs) == 0:
+                    Client.create_tweet(text=tweet)
+                else:
                     Client.create_tweet(text=tweet, media_ids=mediaIDs)
-                    break
-                except:
-                    # if error is <tweepy.errors.BadRequest>
-                    # print possible error
-                    print("Error: ", sys.exc_info()[0])
-                    if sys.exc_info()[0] == tweepy.errors.BadRequest:
-                        print("""
+            except:
+                # keep generating tweets until it works
+                while True:
+                    tweet = generateTweet()
+                    try:
+                        Client.create_tweet(text=tweet, media_ids=mediaIDs)
+                        break
+                    except:
+                        # if error is <tweepy.errors.BadRequest>
+                        # print possible error
+                        print("Error: ", sys.exc_info()[0])
+                        if sys.exc_info()[0] == tweepy.errors.BadRequest:
+                            print("""
 Possible error!
     1. Tweet is too long
     2. Tweet is a duplicate
     3. API key is invalid
-                        """)
-                        pass
-                    elif sys.exc_info()[0] == tweepy.errors.Forbidden:
-                        print("""
+                            """)
+                            pass
+                        elif sys.exc_info()[0] == tweepy.errors.Forbidden:
+                            print("""
 Possible error!
     1. API key doesn't have permission to tweet | check if it's read-only
-                        """)
-                        sys.exit()
-        print(f"Tweeted: {tweet}")
-    except:
-        print(f"Tweet failed: {tweet}")
-        # print the error
-        print(sys.exc_info()[0])
-
-    # delete the images
-    for image in imgList:
-        image = image.split("{img ")[1]
-        image = image.split("}")[0]
-        image_name = image.split("/")[-1]
-        # sometimes the image link can have a query string, so we need to remove it
-        if "?" in image_name:
-            image_name = image_name.split("?")[0]
-        try:
-            os.remove(image_name)
+                            """)
+                            sys.exit()
+            print(f"Tweeted: {tweet}")
         except:
+            print(f"Tweet failed: {tweet}")
+            # print the error
+            print(sys.exc_info()[0])
+
+        # delete the images
+        for image in imgList:
+            image = image.split("{img ")[1]
+            image = image.split("}")[0]
+            image_name = image.split("/")[-1]
+            # sometimes the image link can have a query string, so we need to remove it
+            if "?" in image_name:
+                image_name = image_name.split("?")[0]
             try:
-                os.remove("temp.png")
+                os.remove(image_name)
             except:
-                print("Couldn't delete image; it probably doesn't exist")
+                try:
+                    os.remove("temp.png")
+                except:
+                    print("Couldn't delete image; it probably doesn't exist")
 
-    # delete the videos
-    for video in videoList:
-        video = video.split("{vid ")[1]
-        video = video.split("}")[0]
-        video_name = video.split("/")[-1]
-        # sometimes the video link can have a query string, so we need to remove it
-        if "?" in video_name:
-            video_name = video_name.split("?")[0]
-        try:
-            os.remove(video_name)
-        except:
+        # delete the videos
+        for video in videoList:
+            video = video.split("{vid ")[1]
+            video = video.split("}")[0]
+            video_name = video.split("/")[-1]
+            # sometimes the video link can have a query string, so we need to remove it
+            if "?" in video_name:
+                video_name = video_name.split("?")[0]
             try:
-                os.remove("temp.mp4")
+                os.remove(video_name)
             except:
-                print("Couldn't delete video; it probably doesn't exist")
+                try:
+                    os.remove("temp.mp4")
+                except:
+                    print("Couldn't delete video; it probably doesn't exist")
 
-    # wait for the time between tweets
-    time.sleep(time_between_tweets)
-
+    else:
+        time.sleep(1)
