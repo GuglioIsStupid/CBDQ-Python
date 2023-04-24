@@ -197,11 +197,12 @@ def generateTweet():
         tweet = tweet.replace(vid, "")
 
     return tweet
-
-now = time.time()
+now = 0
 while True:
     timer = time.time()
-    if timer - now >= time_between_tweets:
+    
+    #print(f"Time since last tweet: {timer - (now or 0)}")
+    if timer - (now or 0) >= time_between_tweets:
         try:
             # Check github version for every tweet
             r = requests.get("https://raw.githubusercontent.com/GuglioIsStupid/CBDQ-Python/master/version.txt")
@@ -285,6 +286,6 @@ Possible error!
                     os.remove("temp.mp4")
                 except:
                     print("Couldn't delete video; it probably doesn't exist")
-
+        now = time.time()
     else:
         time.sleep(1)
