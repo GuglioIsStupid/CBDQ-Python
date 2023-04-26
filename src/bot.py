@@ -112,6 +112,22 @@ def generateTweet():
     for blah in re.findall(r"#[a-zA-Z0-9]+#", tweet):
         blahList.append(blah)
 
+    # check if {grayscale} is anywhere in the tweet
+    '''
+    if "{grayscale}" in tweet:
+        grayscale = True
+        tweet = tweet.replace("{grayscale}", "")
+    else:
+        grayscale = False
+    '''
+    grayscale = False
+    imgToGray = ""
+    # {grayscale, imgNum/all}
+    for grayscale_ in re.findall(r"{grayscale, \S+}", tweet):
+        grayscale = True
+        imgToGray = str(grayscale_.split(", ")[1].replace("}", ""))
+        tweet = tweet.replace(grayscale_, "")
+
     # replace the #blah# with a random word from the blah array
     for blah in blahList:
         choice = random.choice(botjson[blah[1:-1]])
@@ -155,10 +171,13 @@ def generateTweet():
         # replace the {rand 1, 10} with the random number
         tweet = tweet.replace(num, str(num_n), 1)
 
+
+    curImg = 0
     # {text image, font, size, placement, text} (placement is a string, either top, middle, or bottom)
     # use PIL to add text to the image
     # everything after placement is the text
     for text in re.findall(r"{text \S+, \S+, \S+, \S+, '[\S\s]+'}", tweet):
+        curImg += 1
         # get the text
         text_ = text.split("{text ")[1].split("}")[0]
         # get the image
@@ -184,6 +203,16 @@ def generateTweet():
             open("unknown.png", "wb").write(r.content)
         # open the image
         img = Image.open("temp.png")
+
+        # if grayscale is true, convert the image to grayscale
+        if grayscale:
+            if str(imgToGray) == "all":
+                print("all")
+                img = img.convert("L")
+            elif str(imgToGray) == str(curImg):
+                print("len")
+                img = img.convert("L")
+
         # get the width and height
         width, height = img.size
         # create a draw object
@@ -228,9 +257,10 @@ def generateTweet():
         # remove the {text image, font, size, placement, 'text'} from the tweet
         tweet = tweet.replace(text, "")
 
-
+    curImg = 0
         
     for img in imgList:
+        curImg += 1
         # download the image w/ requests
         image = img.split("{img ")[1]
         image = image.split("}")[0]
@@ -248,6 +278,17 @@ def generateTweet():
                 open("temp.png", "wb").write(r.content)
         except:
             image_name = "unknown.png"
+
+        # if grayscale is true, convert the image to grayscale
+        if grayscale:
+            if str(imgToGray) == "all":
+                img_ = Image.open(image_name)
+                img_ = img_.convert("L")
+                img_.save(image_name)
+            elif str(imgToGray) == str(curImg):
+                img_ = Image.open(image_name)
+                img_ = img_.convert("L")
+                img_.save(image_name)
 
         # upload the image to twitter
         try:
@@ -339,6 +380,16 @@ Possible error!
 Possible error!
     1. API key doesn't have permission to tweet | check if it's read-only
                             """)
+                            sys.exit()
+                        elif sys.exc_info()[0] == tweepy.errors.TooManyRequests:
+                            print("""
+Possible error!
+    1. API key has reached its limit
+    -- Sleeping for 15 minutes --
+                            """)
+                            time.sleep(900)
+                        else:
+                            print("Unknown error")
                             sys.exit()
             print(f"Tweeted: {tweet}")
         except:

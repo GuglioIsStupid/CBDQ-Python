@@ -23,7 +23,8 @@
 		"{img https://media.discordapp.net/attachments/1060937468691611751/1094672949111423018/IMG_2250.jpg?width=677&height=570}",
 		"#video#",
 		"#character# owes the bank ${rand 100000, 100000000} dollars!",
-		"#imageedit#"
+		"#imageedit#",
+		"#grayscale#"
 	],
 
 	"character": [
@@ -45,5 +46,9 @@
 
 	"imageedit": [
 		"{text https://pbs.twimg.com/media/FtTQo6TWAAAv2eo?format=jpg&name=small, fonts/impact.ttf, 30, top, 'i love hamgurbver'}"
+	],
+
+	"grayscale": [
+		"{grayscale, all}Goku has passed away.... RIP BOZO 😂{img https://media.discordapp.net/attachments/783856131189112842/1100868959022104616/R.png}"
 	]
 }
