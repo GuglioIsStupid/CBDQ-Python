@@ -1,5 +1,7 @@
 {
-	"origin": ["#quote#"],
+	"origin": [
+		"#quote#"
+	],
 
 	"quote": [
 		"i love hamgurbver #image#",
@@ -20,7 +22,8 @@
 		"{vid https://video.twimg.com/ext_tw_video/1644684779340673028/pu/vid/576x1024/OpmbAfHAxTIgbA5B.mp4?tag=12}",
 		"{img https://media.discordapp.net/attachments/1060937468691611751/1094672949111423018/IMG_2250.jpg?width=677&height=570}",
 		"#video#",
-		"#character# owes the bank ${rand 100000, 100000000} dollars!"
+		"#character# owes the bank ${rand 100000, 100000000} dollars!",
+		"#imageedit#"
 	],
 
 	"character": [
@@ -38,5 +41,9 @@
 
 	"video": [
 		"{vid https://video.twimg.com/ext_tw_video/1645078619847376898/pu/vid/622x686/rGh_T9O8rHRKnJ5k.mp4?tag=12}"
+	],
+
+	"imageedit": [
+		"{text https://pbs.twimg.com/media/FtTQo6TWAAAv2eo?format=jpg&name=small, fonts/impact.ttf, 30, top, 'i love hamgurbver'}"
 	]
 }

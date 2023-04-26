@@ -10,6 +10,10 @@ changes and you're good to go.
 - GuglioIsStupid - 2023
 """
 import os, json, tweepy, time, random, requests, re, sys
+import PIL.Image as Image
+from PIL import ImageFile
+from PIL import ImageDraw
+from PIL import ImageFont
 
 # Twitter API Keys
 # You will need to include your OWN Twitter API keys in a .env file in the same directory 
@@ -151,6 +155,81 @@ def generateTweet():
         # replace the {rand 1, 10} with the random number
         tweet = tweet.replace(num, str(num_n), 1)
 
+    # {text image, font, size, placement, text} (placement is a string, either top, middle, or bottom)
+    # use PIL to add text to the image
+    # everything after placement is the text
+    for text in re.findall(r"{text \S+, \S+, \S+, \S+, '[\S\s]+'}", tweet):
+        # get the text
+        text_ = text.split("{text ")[1].split("}")[0]
+        # get the image
+        image = text_.split(", ")[0]
+        # get the font
+        font = text_.split(", ")[1]
+        # get the font size
+        size = int(text_.split(", ")[2])
+        # get the placement
+        placement = text_.split(", ")[3]
+        # get the text
+        text_2 = text_.split(", ")[4]
+        # download the image
+        r = requests.get(image, allow_redirects=True)
+        try:
+            try:
+                open("temp.png", "wb").write(r.content)
+            except:
+                image = "temp.png"
+                open("temp.png", "wb").write(r.content)
+        except:
+            image = "unknown.png"
+            open("unknown.png", "wb").write(r.content)
+        # open the image
+        img = Image.open("temp.png")
+        # get the width and height
+        width, height = img.size
+        # create a draw object
+        draw = ImageDraw.Draw(img)
+        # get the font
+        font = ImageFont.truetype(font, size)
+        # get the width and height of the text
+        w, h = draw.textsize(text_2, font=font)
+        # get the x and y coordinates
+        if placement == "top":
+            x = (width - w) / 2
+            y = 0
+        elif placement == "bottom":
+            x = (width - w) / 2
+            y = height - h
+        elif placement == "topleft":
+            x = 0
+            y = 0
+        elif placement == "topright":
+            x = width - w
+            y = 0
+        elif placement == "bottomleft":
+            x = 0
+            y = height - h
+        elif placement == "bottomright":
+            x = width - w
+            y = height - h
+        else:
+            x = (width - w) / 2
+            y = (height - h) / 2
+        # draw the text
+        draw.text((x, y), text_2, font=font)
+        # save the image
+        img.save("temp.png")
+        # upload the image to twitter
+        try:
+            media = api.media_upload("temp.png")
+        except:
+            media = api.media_upload("unknown.png")
+        # add the media id to the mediaIDs list
+        mediaIDs.append(media.media_id_string)
+        # remove the {text image, font, size, placement, 'text'} from the tweet
+        tweet = tweet.replace(text, "")
+
+
+        
     for img in imgList:
         # download the image w/ requests
         image = img.split("{img ")[1]
@@ -254,7 +333,7 @@ Possible error!
     2. Tweet is a duplicate
     3. API key is invalid
                             """)
-                            pass
+                            sys.exit()
                         elif sys.exc_info()[0] == tweepy.errors.Forbidden:
                             print("""
 Possible error!
