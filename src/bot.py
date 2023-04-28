@@ -357,40 +357,14 @@ while True:
                 else:
                     Client.create_tweet(text=tweet, media_ids=mediaIDs)
             except:
-                # keep generating tweets until it works
-                while True:
-                    tweet = generateTweet()
-                    try:
-                        Client.create_tweet(text=tweet, media_ids=mediaIDs)
-                        break
-                    except:
-                        # if error is <tweepy.errors.BadRequest>
-                        # print possible error
-                        print("Error: ", sys.exc_info()[0])
-                        if sys.exc_info()[0] == tweepy.errors.BadRequest:
-                            print("""
-Possible error!
-    1. Tweet is too long
-    2. Tweet is a duplicate
-    3. API key is invalid
-                            """)
-                            sys.exit()
-                        elif sys.exc_info()[0] == tweepy.errors.Forbidden:
-                            print("""
-Possible error!
-    1. API key doesn't have permission to tweet | check if it's read-only
-                            """)
-                            sys.exit()
-                        elif sys.exc_info()[0] == tweepy.errors.TooManyRequests:
-                            print("""
-Possible error!
-    1. API key has reached its limit
-    -- Sleeping for 15 minutes --
-                            """)
-                            time.sleep(900)
-                        else:
-                            print("Unknown error")
-                            sys.exit()
+                tweet = generateTweet() # try again
+                try:
+                    Client.create_tweet(text=tweet, media_ids=mediaIDs)
+                except:
+                    print(f"Tweet failed: {tweet}")
+                    # print the error
+                    print(sys.exc_info()[0])
+                        
             print(f"Tweeted: {tweet}")
         except:
             print(f"Tweet failed: {tweet}")
