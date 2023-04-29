@@ -96,6 +96,17 @@ otherList = []
 videoList = []
 numList = []
 
+grayscale = False
+imgToGray = ""
+
+global uppercase
+global lowercase
+
+uppercase = False
+lowercase = False
+
+
+
 def resetLists():
     blahList.clear()
     mediaIDs.clear()
@@ -128,12 +139,26 @@ def generateTweet():
         imgToGray = str(grayscale_.split(", ")[1].replace("}", ""))
         tweet = tweet.replace(grayscale_, "")
 
+    global uppercase, lowercase
+
+    lowercase = False # sets all the text to lowercase
+    uppercase = False # sets all the text to uppercase
+
+    for lowercase_ in re.findall(r"{lowercase}", tweet):
+        lowercase = True
+        tweet = tweet.replace(lowercase_, "")
+
+    for uppercase_ in re.findall(r"{uppercase}", tweet):
+        uppercase = True
+        tweet = tweet.replace(uppercase_, "")
+
     # replace the #blah# with a random word from the blah array
     for blah in blahList:
         choice = random.choice(botjson[blah[1:-1]])
         
         while choice in otherList:
             choice = random.choice(botjson[blah[1:-1]])
+
         otherList.append(choice)
 
         tweet = tweet.replace(blah, choice, 1)
@@ -144,6 +169,7 @@ def generateTweet():
                 
                 while choice in otherList:
                     choice = random.choice(botjson[blah[1:-1]])
+
                 otherList.append(choice)
 
                 tweet = tweet.replace(blah, choice, 1)
@@ -348,7 +374,10 @@ while True:
 
         # get a random tweet from the origin array
         tweet = generateTweet()
-
+        if lowercase:
+            tweet = tweet.lower()
+        elif uppercase:
+            tweet = tweet.upper()
         # tweet the tweet
         try:
             try:
@@ -356,16 +385,18 @@ while True:
                     Client.create_tweet(text=tweet)
                 else:
                     Client.create_tweet(text=tweet, media_ids=mediaIDs)
+
+                print(f"Tweeted: {tweet}")
             except:
                 tweet = generateTweet() # try again
                 try:
                     Client.create_tweet(text=tweet, media_ids=mediaIDs)
+                    print(f"Tweeted: {tweet}")
                 except:
                     print(f"Tweet failed: {tweet}")
                     # print the error
                     print(sys.exc_info()[0])
-                        
-            print(f"Tweeted: {tweet}")
+                    
         except:
             print(f"Tweet failed: {tweet}")
             # print the error

@@ -24,7 +24,9 @@
 		"#video#",
 		"#character# owes the bank ${rand 100000, 100000000} dollars!",
 		"#imageedit#",
-		"#grayscale#"
+		"#grayscale#",
+        "{uppercase}i am yelling (in lowercase)",
+        "{lowercase}i am whispering (in uppercase)"
 	],
 
 	"character": [
