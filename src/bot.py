@@ -131,12 +131,6 @@ def generateTweet():
     '''
     grayscale = False
     imgToGray = ""
-    # {grayscale, imgNum/all}
-    for grayscale_ in re.findall(r"{grayscale, \S+}", tweet):
-        grayscale = True
-        imgToGray = str(grayscale_.split(", ")[1].replace("}", ""))
-        tweet = tweet.replace(grayscale_, "")
-
     global uppercase, lowercase
 
     lowercase = False # sets all the text to lowercase
@@ -172,6 +166,13 @@ def generateTweet():
 
                 tweet = tweet.replace(blah, choice, 1)
         #print(f"Replaced {blah} with {choice}")
+
+    # {grayscale, imgNum/all}, can be a number or all
+    for grayscale_ in re.findall(r"{grayscale, \S+}", tweet):
+        
+        grayscale = True
+        imgToGray = str(grayscale_.split(", ")[1].replace("}", ""))
+        tweet = tweet.replace(grayscale_, "")
 
     # get all the {img link} in the tweet
     for img in re.findall(r"{img \S+}", tweet):
