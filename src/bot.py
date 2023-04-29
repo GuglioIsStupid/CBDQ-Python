@@ -105,6 +105,16 @@ global lowercase
 uppercase = False
 lowercase = False
 
+def divide_string(string):
+    length = len(string)
+
+    if length % 3 == 0:
+        return [string[i:i+length//3] for i in range(0, length, length//3)]
+    elif length % 3 == 1:
+        return [string[:length//3+1], string[length//3+1//3*2], string[length//3+1//3*2+1:]]
+    else:
+        return [string[:length//3+2], string[length//3+2:length//3*2+2], string[length//3*2+2:]]
+
 def resetLists():
     blahList.clear()
     mediaIDs.clear()
@@ -173,6 +183,23 @@ def generateTweet():
         grayscale = True
         imgToGray = str(grayscale_.split(", ")[1].replace("}", ""))
         tweet = tweet.replace(grayscale_, "")
+
+    # {grayscale, 'str lol'} # needs to have spaces in the string
+    for divide_ in re.findall(r"{divide, '[a-zA-Z0-9 ]+'}", tweet):
+        # remove the '' from the strin
+        divided_ = divide_.replace("'", "")
+        divided_ = divided_.replace("{divide, ", "")
+        divided_ = divided_.replace("}", "")
+        divided_ = divide_string(divided_)
+        dividedConcat = ""
+        for divided in divided_:
+            # if its not the last item in the list, add a space
+            if divided != divided_[-1]:
+                dividedConcat += divided + ", "
+            else:
+                dividedConcat += divided
+
+        tweet = tweet.replace(divide_, dividedConcat)
 
     # get all the {img link} in the tweet
     for img in re.findall(r"{img \S+}", tweet):
