@@ -105,8 +105,6 @@ global lowercase
 uppercase = False
 lowercase = False
 
-
-
 def resetLists():
     blahList.clear()
     mediaIDs.clear()
