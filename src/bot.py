@@ -107,13 +107,16 @@ lowercase = False
 
 def divide_string(string):
     length = len(string)
-
-    if length % 3 == 0:
+    # change the value to change the amount of divisons you want
+   DivisonAmount = 3 
+   
+    if length % DivisonAmount == 0:
         return [string[i:i+length//3] for i in range(0, length, length//3)]
-    elif length % 3 == 1:
+    elif length % DivisonAmount == 1:
         return [string[:length//3+1], string[length//3+1//3*2], string[length//3+1//3*2+1:]]
     else:
         return [string[:length//3+2], string[length//3+2:length//3*2+2], string[length//3*2+2:]]
+        
 
 def resetLists():
     blahList.clear()
