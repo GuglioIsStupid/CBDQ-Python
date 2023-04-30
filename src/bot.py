@@ -165,7 +165,9 @@ def generateTweet():
 
         otherList.append(choice)
 
+        print(tweet, blah, choice)
         tweet = tweet.replace(blah, choice, 1)
+
         # check if theres another #blah# in the tweet, can be character, item, etc
         if re.findall(r"#[a-zA-Z0-9]+#", tweet):
             for blah in re.findall(r"#[a-zA-Z0-9]+#", tweet):
@@ -173,7 +175,7 @@ def generateTweet():
                 
                 while choice in otherList:
                     choice = random.choice(botjson[blah[1:-1]])
-
+                
                 otherList.append(choice)
 
                 tweet = tweet.replace(blah, choice, 1)
@@ -186,25 +188,8 @@ def generateTweet():
         imgToGray = str(grayscale_.split(", ")[1].replace("}", ""))
         tweet = tweet.replace(grayscale_, "")
 
-    # {grayscale, 'str lol'} # needs to have spaces in the string
-    for divide_ in re.findall(r"{divide, '[a-zA-Z0-9 ]+'}", tweet):
-        # remove the '' from the strin
-        divided_ = divide_.replace("'", "")
-        divided_ = divided_.replace("{divide, ", "")
-        divided_ = divided_.replace("}", "")
-        divided_ = divide_string(divided_)
-        dividedConcat = ""
-        for divided in divided_:
-            # if its not the last item in the list, add a space
-            if divided != divided_[-1]:
-                dividedConcat += divided + ", "
-            else:
-                dividedConcat += divided
-
-        tweet = tweet.replace(divide_, dividedConcat)
-
-    # get all the {img link} in the tweet
-    for img in re.findall(r"{img \S+}", tweet):
+    # get all the {img link} in the tweet, stop at the first }, else its gonna try to do {{img link'}} and fail
+    for img in re.findall(r"{img [^}]+}", tweet):
         imgList.append(img)
         # remove it from the tweet
         tweet = tweet.replace(img, "")
@@ -225,6 +210,24 @@ def generateTweet():
         # replace the {rand 1, 10} with the random number
         tweet = tweet.replace(num, str(num_n), 1)
 
+    # {grayscale, 'str lol'} # needs to have spaces, special characters, etc
+    for divide_ in re.findall(r"{divide, [\S\s]+}", tweet):
+        # remove the '' from the strin
+        divided_ = divide_.replace("'", "")
+        divided_ = divided_.replace("{divide, ", "")
+        divided_ = divided_.replace("}", "")
+        divided_ = divide_string(divided_)
+        dividedConcat = ""
+        for divided in divided_:
+            # if its not the last item in the list, add a space
+            if divided != divided_[-1]:
+                dividedConcat += divided + ", "
+            else:
+                dividedConcat += divided
+
+        print(dividedConcat)
+
+        tweet = tweet.replace(divide_, dividedConcat)
 
     curImg = 0
     # {text image, font, size, placement, text} (placement is a string, either top, middle, or bottom)
