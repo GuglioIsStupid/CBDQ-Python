@@ -105,10 +105,9 @@ global lowercase
 uppercase = False
 lowercase = False
 
-def divide_string(string):
+def divide_string(string, DivisonAmount:int = 3):
     length = len(string)
     # change the value to change the amount of divisons you want
-   DivisonAmount = 3 
    
     if length % DivisonAmount == 0:
         return [string[i:i+length//3] for i in range(0, length, length//3)]
