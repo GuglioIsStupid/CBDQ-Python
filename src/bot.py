@@ -246,7 +246,7 @@ def generateTweet():
         # get the placement
         placement = text_.split(", ")[3]
         # get the text
-        text_2 = text_.split(", ")[4]
+        text_2 = text_.split(", ")[4].replace("'", "")
         # download the image
         r = requests.get(image, allow_redirects=True)
         try:
