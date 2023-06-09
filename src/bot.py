@@ -264,8 +264,10 @@ def generateTweet():
                 image = "temp.png"
                 open("temp.png", "wb").write(r.content)
         except:
+            # choose a random image from RandomImageErrors, is a local image
             image = random.choice(RandomImageErrors)
-            open("unknown.png", "wb").write(r.content)
+            # save the image as temp.png
+            open("temp.png", "wb").write(image)
         # open the image
         img = Image.open("temp.png")
 
