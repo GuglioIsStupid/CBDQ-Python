@@ -15,14 +15,6 @@ from PIL import ImageFile
 from PIL import ImageDraw
 from PIL import ImageFont
 
-
-# By default, there's only gonna be one picture
-RandomImageErrors = [
-    "unknown.png",
-    "unknown.png"
-]
-
-
 # Twitter API Keys
 # You will need to include your OWN Twitter API keys in a .env file in the same directory 
 # as this script. You can get your own Twitter API keys at https://developer.twitter.com/
@@ -264,12 +256,8 @@ def generateTweet():
                 image = "temp.png"
                 open("temp.png", "wb").write(r.content)
         except:
-            # choose a random image from RandomImageErrors, is a local image
-            image = random.choice(RandomImageErrors)
-            # open the image
-            img = Image.open(image)
-            # save as temp.png
-            img.save("temp.png")
+            image = "unknown.png"
+            open("unknown.png", "wb").write(r.content)
         # open the image
         img = Image.open("temp.png")
 
@@ -320,7 +308,7 @@ def generateTweet():
         try:
             media = api.media_upload("temp.png")
         except:
-           media = api.media_upload(random.choice(RandomImageErrors))
+            media = api.media_upload("unknown.png")
         # add the media id to the mediaIDs list
         mediaIDs.append(media.media_id_string)
         # remove the {text image, font, size, placement, 'text'} from the tweet
@@ -363,7 +351,7 @@ def generateTweet():
         try:
             media = api.media_upload(image_name)
         except:
-            image_name = random.choice(RandomImageErrors)
+            image_name = "unknown.png"
             media = api.media_upload(image_name)
         print(f"Uploaded image: {image_name}")
         mediaIDs.append(media.media_id)
