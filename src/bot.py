@@ -74,6 +74,22 @@ except:
     print("Error during authentication")
     sys.exit()
 
+#Checking if requests is up to date to prevent the bot failing to get the images
+try:
+ requestsVer = requests.__version__
+ requestResponse = requests.get(f"https://pypi.org/pypi/requests/json")
+ data = requestResponse.json()
+ latestVer = data["info"]["version"]
+
+
+ if requestsVer != latestVer:
+    print("Your requests library is outdated, please update it")
+    sys.exit()
+ else:
+     pass
+except:
+    print("Couldn't send any request, check it yourself manually and update it here:\nhttps://github.com/psf/requests/releases")
+
 # The time between every new tweet
 # This is in seconds, so 3600 is 1 hour
 # Default is 30 minutes
