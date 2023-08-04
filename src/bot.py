@@ -129,10 +129,6 @@ def generateTweet():
     tweet = random.choice(botjson["origin"])
     resetLists()
 
-    # get all the #blah# in the tweet,can also be given as a lowercase, uppercase, numbers, special characters, spaces, etc
-    for blah in re.findall(r"#[a-zA-Z0-9]+#", tweet):
-        blahList.append(blah)
-
     # check if {grayscale} is anywhere in the tweet
     '''
     if "{grayscale}" in tweet:
@@ -157,6 +153,11 @@ def generateTweet():
         tweet = tweet.replace(uppercase_, "")
 
     # replace the #blah# with a random word from the blah array
+    """
+    # get all the #blah# in the tweet,can also be given as a lowercase, uppercase, numbers, special characters, spaces, etc
+    for blah in re.findall(r"#[a-zA-Z0-9]+#", tweet):
+        blahList.append(blah)
+
     for blah in blahList:
         choice = random.choice(botjson[blah[1:-1]])
         
@@ -180,6 +181,18 @@ def generateTweet():
 
                 tweet = tweet.replace(blah, choice, 1)
         #print(f"Replaced {blah} with {choice}")
+    """
+    # optimize above code with a while loop!
+    while re.findall(r"#[a-zA-Z0-9]+#", tweet):
+        for blah in re.findall(r"#[a-zA-Z0-9]+#", tweet):
+            choice = random.choice(botjson[blah[1:-1]])
+            
+            while choice in otherList:
+                choice = random.choice(botjson[blah[1:-1]])
+            
+            otherList.append(choice)
+
+            tweet = tweet.replace(blah, choice, 1)
 
     # {grayscale, imgNum/all}, can be a number or all
     for grayscale_ in re.findall(r"{grayscale, \S+}", tweet):
