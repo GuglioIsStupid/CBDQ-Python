@@ -1,38 +1,5 @@
-# API Keys
 .env
-cred.json
-
-# bot images
-*.png
-*.jpg
-*.jpeg
-*.gif
-*.svg
-*.webp
-
-# bot videos
-*.mp4
-*.mov
-*.avi
-*.mkv
-
-# Personal testing files
-charsenjoyingfood.json
-randomassbot.json
-bot-ignore.json
-
-# throwback image
-!unknown.png
-
-# Guide files
-!imgs/2.png
-!imgs/3.png
-!imgs/4.png
-!imgs/5.png
-
-# Replit specific files
-main.py
-keep_alive.py
-
-# Release files
-*.zip
+!example.env
+src/bot.json
+!example.bot.json
+__pycache__/

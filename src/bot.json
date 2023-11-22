@@ -1,56 +1,9 @@
 {
-	"origin": [
-		"#quote#"
-	],
+    "origin": ["You have just created your first Twitter Bot! #random thank you!#"],
 
-	"quote": [
-		"i love hamgurbver #image#",
-		"Cheese burger,,..., mmmmm cheesee #image#",
-		"i love cheese burger #image#",
-		"hamgurb #image#",
-		"i love hamgurb #image#",
-		"🤤🤤🤤 hambuger #image#",
-		"mmmm ches gutrb #image#",
-		"i love cheese burger #image#",
-		"#character# loves hamgurber #image#",
-		"bowser. {vid https://video.twimg.com/ext_tw_video/1645179978298867713/pu/vid/640x640/qnUE8qa-Gwqa4Zh_.mp4?tag=12}",
-		"Gay mario bros are so awesome {img https://media.discordapp.net/attachments/1060937468691611751/1094963219472334878/SPOILER_FtT1pWqXsAI-ZD3.jpg?width=463&height=570}",
-		"GET DOXXED LMAOOOOO {img https://media.discordapp.net/attachments/1060937468691611751/1094771203891269723/rHLwFz3LCiFdU0IoOxVnvwYbPTZ1HT43IlYawvjoirw.jpg?width=770&height=402}",
-		"ong {img https://media.discordapp.net/attachments/1060937468691611751/1094710705929867304/FtPAgCtWwAMbCaY.jpg?width=355&height=569}",
-		"freddy fgazxvber {vid https://images-ext-2.discordapp.net/external/U87sO4JlLkixzuVfSAYmz86cLeJ6jpaAf_NHhYGlTig/https/media.tenor.com/8hu_1zL7vWYAAAPo/freddy-fazbear-five-feddy-at-night.mp4}",
-		"this shit is so good frfr {img https://media.discordapp.net/attachments/1060937468691611751/1094681382095175730/FtSlMqMaMAArrfv.jpg?width=686&height=570}",
-		"{vid https://video.twimg.com/ext_tw_video/1644684779340673028/pu/vid/576x1024/OpmbAfHAxTIgbA5B.mp4?tag=12}",
-		"{img https://media.discordapp.net/attachments/1060937468691611751/1094672949111423018/IMG_2250.jpg?width=677&height=570}",
-		"#video#",
-		"#character# owes the bank ${rand 100000, 100000000} dollars!",
-		"#imageedit#",
-		"#grayscale#",
-        "{uppercase}i am yelling (in lowercase)",
-        "{lowercase}i am whispering (in uppercase)"
-	],
-
-	"character": [
-		"Foamy Fox{img https://media.discordapp.net/attachments/1060937468691611751/1094990395114520608/FtW-TjOXsAE7mEK.jpg?width=277&height=569}",
-		"Will Cypha{img https://media.discordapp.net/attachments/1095185738783526973/1095185752398254161/FtZw1o_WIAAFARE.png?width=748&height=523}"
-	],
-
-	"image": [
-		"{img https://i.imgur.com/SDEfwEJ.jpeg}",
-		"{img https://i.imgur.com/ZmAFNFD.jpeg}",
-		"{img https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSnpjORQxqN6yQI1LTXyrOhwOhhPA7QZ-7lBwy81fq299LP11x_nOeuAS9J-_72weCPgiM&usqp=CAU}",
-		"{img https://www.foodandwine.com/thmb/DI29Houjc_ccAtFKly0BbVsusHc=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/crispy-comte-cheesburgers-FT-RECIPE0921-6166c6552b7148e8a8561f7765ddf20b.jpg}",
-		"{img https://www.coopercheese.com/wp-content/uploads/2022/02/Cooper-Mac-and-Cheese-burger.webp}"
-	],
-
-	"video": [
-		"{vid https://video.twimg.com/ext_tw_video/1645078619847376898/pu/vid/622x686/rGh_T9O8rHRKnJ5k.mp4?tag=12}"
-	],
-
-	"imageedit": [
-		"{text https://pbs.twimg.com/media/FtTQo6TWAAAv2eo?format=jpg&name=small, fonts/impact.ttf, 30, top, 'i love hamgurbver'}"
-	],
-
-	"grayscale": [
-		"{grayscale, all}Goku has passed away.... RIP BOZO 😂{img https://media.discordapp.net/attachments/783856131189112842/1100868959022104616/R.png}"
-	]
+    "random thank you!": [
+        "Thank you for trying out this script!",
+        "Hope you like it!",
+        "Have a nice day!"
+    ]
 }
