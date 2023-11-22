@@ -85,11 +85,13 @@ def GenerateTweet():
 
     for img in re.findall(r"{img \S+}", tweet):
         img = img.replace("{img ", "").replace("}", "").strip()
+        tweet = tweet.replace("{img " + img + "}", "")
         if img not in mediaIDs:
             mediaList.append(img)
 
-    for video in re.findall(r"{video \S+}", tweet):
-        video = video.replace("{video ", "").replace("}", "").strip()
+    for video in re.findall(r"{vid \S+}", tweet):
+        video = video.replace("{vid ", "").replace("}", "").strip()
+        tweet = tweet.replace("{vid " + video + "}", "")
         if video not in mediaIDs:
             mediaList.append(video)
 
@@ -106,7 +108,13 @@ def GenerateTweet():
     else:
         Client.create_tweet(text=tweet)
 
+    print("Tweeted: " + tweet)
+
+
 def UploadMedia(media):
+    # remove media if exists
+    if os.path.exists("media"):
+        os.remove("media")
     # download media
     try:
         r = requests.get(media, allow_redirects=True)
@@ -115,7 +123,6 @@ def UploadMedia(media):
         # upload unknown.png 
         open("media", "wb").write(open("unknown.png", "rb").read())
     media = api.media_upload("media")
-    media = api.media_upload(media)
     return media.media_id
 
 now = 0
