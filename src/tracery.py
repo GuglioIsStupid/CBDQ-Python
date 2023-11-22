@@ -4,6 +4,82 @@
 
 import json, re, random, sys, time
 
+def Mod_IsVowel(letter):
+    letter = letter.lower()
+    return (letter == "a" or letter == "e" or letter == "i" or letter == "o" or letter == "u")
+
+def Mod_IsAlphaNumeric(letter):
+    return (letter.isalnum() or letter == " ")
+
+def Mod_A(s):
+    if len(s) > 0:
+        if s[0].lower() == "u":
+            if len(s) > 2:
+                if s[2].lower() == "i":
+                    return "a " + s
+        if Mod_IsVowel(s[0]):
+            return "an " + s
+    return "a " + s
+
+def Mod_FirstS(s):
+    s2 = s.split(" ")
+    finished = Mod_S(s2[0]) + " " + " ".join(s2[1:])
+    return finished
+
+def Mod_S(s):
+    if len(s) > 0:
+        if s[-1] == "s" or s[-1] == "h" or s[-1] == "x":
+            return s + "es"
+        elif s[-1] == "y":
+            if not Mod_IsVowel(s[-2]):
+                return s[:-1] + "ies"
+            else:
+                return s + "s"
+        else:
+            return s + "s"
+    return s
+
+"""
+ed : function(s) {
+		switch (s.charAt(s.length -1)) {
+		case 's':
+			return s + "ed";
+			break;
+		case 'e':
+			return s + "d";
+			break;
+		case 'h':
+			return s + "ed";
+			break;
+		case 'x':
+			return s + "ed";
+			break;
+		case 'y':
+			if (!isVowel(s.charAt(s.length - 2)))
+				return s.substring(0, s.length - 1) + "ied";
+			else
+				return s + "d";
+			break;
+		default:
+			return s + "ed";
+		}
+	}"""
+
+def Mod_Ed(s):
+    if len(s) > 0:
+        if s[-1] == "s" or s[-1] == "h" or s[-1] == "x":
+            return s + "ed"
+        elif s[-1] == "e":
+            return s + "d"
+        elif s[-1] == "y":
+            if not Mod_IsVowel(s[-2]):
+                return s[:-1] + "ied"
+            else:
+                return s + "d"
+        else:
+            return s + "ed"
+    return s
+
 class Tracery():
     def __init__(self, rules):
         # load file 
@@ -14,14 +90,36 @@ class Tracery():
             sys.exit(1)
 
     def ParseTraceryString(self, rule):
+        # can include .lower/capitalize
+        rulemod = rule.split(".")
+        rule = rulemod[0]
+        # modifiers is everything after the first . (can be multiple)
+        modifiers = rulemod[1:]
+
         # new seed every time
         random.seed(time.time())
-        # example: #animal# -> dog, can include spaces and punctuation
+        # example: #animal# -> dog, can include spaces and punctuation (like .,!?)
         # example: #animal names!#
-        #[a-zA-Z0-9 ]+!?#
-        while re.search(r"#([a-zA-Z0-9 ]+!?)#", rule):
-            match = re.search(r"#([a-zA-Z0-9 ]+!?)#", rule)
-            rule = rule.replace(match.group(0), self.ParseTraceryString(random.choice(self.rules[match.group(1)])))
+        #[a-zA-Z0-9 ]+!?
+        while re.search(r"#([a-zA-Z0-9 ]+!?)+#", rule):
+            match = re.search(r"#([a-zA-Z0-9 ]+!?)+#", rule)
+            choice = random.choice(self.rules[match.group(1)])
+            if "lower" in modifiers:
+                choice = choice.lower()
+            elif "capitalize" in modifiers:
+                choice = choice.title()
+            elif "capitalizeAll" in modifiers:
+                choice = choice.upper()
+            elif "a" in modifiers:
+                choice = Mod_A(choice)
+            elif "s" in modifiers:
+                choice = Mod_S(choice)
+            elif "firstS" in modifiers:
+                choice = Mod_FirstS(choice)
+            elif "ed" in modifiers:
+                choice = Mod_Ed(choice)
+            rule = rule.replace(match.group(0), self.ParseTraceryString(choice))
+            
         return rule
     
     def GetMainRule(self):
