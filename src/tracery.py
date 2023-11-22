@@ -4,6 +4,7 @@
 
 import json, re, random, sys, time
 
+# mods implemented from https://github.com/galaxykate/tracery/blob/8baa6ec53271ce7526e14b0ae3069a7469c6f035/js/tracery/mods-eng-basic.js
 def Mod_IsVowel(letter):
     letter = letter.lower()
     return (letter == "a" or letter == "e" or letter == "i" or letter == "o" or letter == "u")
@@ -38,32 +39,6 @@ def Mod_S(s):
         else:
             return s + "s"
     return s
-
-"""
-ed : function(s) {
-		switch (s.charAt(s.length -1)) {
-		case 's':
-			return s + "ed";
-			break;
-		case 'e':
-			return s + "d";
-			break;
-		case 'h':
-			return s + "ed";
-			break;
-		case 'x':
-			return s + "ed";
-			break;
-		case 'y':
-			if (!isVowel(s.charAt(s.length - 2)))
-				return s.substring(0, s.length - 1) + "ied";
-			else
-				return s + "d";
-			break;
-		default:
-			return s + "ed";
-		}
-	}"""
 
 def Mod_Ed(s):
     if len(s) > 0:
