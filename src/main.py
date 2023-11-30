@@ -122,10 +122,10 @@ def GenerateTweet():
     for media in mediaList:
         mediaIDs.append(UploadMedia(media))
 
-    """if len(mediaIDs) > 0:
+    if len(mediaIDs) > 0:
         Client.create_tweet(text=tweet, media_ids=mediaIDs)
     else:
-        Client.create_tweet(text=tweet)"""
+        Client.create_tweet(text=tweet)
 
     print("Tweeted: " + tweet)
 
