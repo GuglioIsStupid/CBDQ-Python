@@ -65,20 +65,23 @@ class Tracery():
             sys.exit(1)
 
     def ParseTraceryString(self, rule):
-        # can include .lower/capitalize
+        """# can include .lower/capitalize
         rulemod = rule.split(".")
         rule = rulemod[0]
         # modifiers is everything after the first . (can be multiple)
-        modifiers = rulemod[1:]
+        modifiers = rulemod[1:]"""
 
         # new seed every time
         random.seed(time.time())
         # example: #animal# -> dog, can include spaces and punctuation (like .,!?)
         # example: #animal names!#
+        # or, #animal names.capitalizeAll#
         #[a-zA-Z0-9 ]+!?
-        while re.search(r"#([a-zA-Z0-9 ]+!?)+#", rule):
-            match = re.search(r"#([a-zA-Z0-9 ]+!?)+#", rule)
+        while re.search(r"#([a-zA-Z0-9 ]+!?)+.?#", rule):
+            match = re.search(r"#([a-zA-Z0-9 ]+!?)+.?#", rule)
             choice = random.choice(self.rules[match.group(1)])
+            # get all rules in the match (seperated with ., first one is the rule)
+            """modifiers = match.group(0).split(".")[1:]
             if "lower" in modifiers:
                 choice = choice.lower()
             elif "capitalize" in modifiers:
@@ -92,7 +95,8 @@ class Tracery():
             elif "firstS" in modifiers:
                 choice = Mod_FirstS(choice)
             elif "ed" in modifiers:
-                choice = Mod_Ed(choice)
+                choice = Mod_Ed(choice)"""
+            # TODO: Figure out why this doesn't work
             rule = rule.replace(match.group(0), self.ParseTraceryString(choice))
             
         return rule

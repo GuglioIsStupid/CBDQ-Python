@@ -14,6 +14,7 @@ except:
     sys.exit(1)
 
 import os, sys, time, re, random
+from dotenv import load_dotenv
 random.seed(time.time())
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
@@ -21,34 +22,21 @@ JsonSource = Tracery("bot.json")
 
 TimeBetweenTweets = 60 * 60 * 0.5 # 30 minutes. 60 seconds * 60 minutes * 0.5 hours
 
-env = {
-    "consumer_key": "",
-    "consumer_secret": "",
-    "access_token": "",
-    "access_token_secret": "",
-    "bearer_token": ""
-}
-
-with open(".env", "r") as f:
-    for line in f.readlines():
-        if line.startswith("#"):
-            continue
-        key, value = line.split("=")
-        env[key.strip()] = value.strip()
+load_dotenv(".env")
 
 Client = tweepy.Client(
-    consumer_key=env["consumer_key"],
-    consumer_secret=env["consumer_secret"],
-    access_token=env["access_token"],
-    access_token_secret=env["access_token_secret"],
-    bearer_token=env["bearer_token"]
+    consumer_key= os.environ["consumer_key"],
+    consumer_secret= os.environ["consumer_secret"],
+    access_token= os.environ["access_token"],
+    access_token_secret= os.environ["access_token_secret"],
+    bearer_token= os.environ["bearer_token"]
 )
 
 auth = tweepy.OAuth1UserHandler(
-    env["consumer_key"],
-    env["consumer_secret"],
-    env["access_token"],
-    env["access_token_secret"]
+    consumer_key= os.environ["consumer_key"],
+    consumer_secret= os.environ["consumer_secret"],
+    access_token= os.environ["access_token"],
+    access_token_secret= os.environ["access_token_secret"]
 )
 
 api = tweepy.API(auth, wait_on_rate_limit=True)
@@ -58,7 +46,6 @@ try:
     print("Authentication OK")
 except:
     print("Error during authentication")
-    sys.exit(1)
 
 try:
     requestsVer = requests.__version__
@@ -71,6 +58,8 @@ except:
 
 global mediaIDs, mediaList
 
+ENVIROMENT = {}
+
 mediaIDs = []
 mediaList = []
 
@@ -78,35 +67,65 @@ def ResetLists():
     global mediaIDs, mediaList
     mediaIDs = []
     mediaList = []
+    ENVIROMENT = {}
 
 def GenerateTweet():
     ResetLists()
     tweet = JsonSource.GetMainRule()
 
     for img in re.findall(r"{img \S+}", tweet):
+        # remove {img \S+}
+        print("Found image: " + img)
+        tweet = tweet.replace(img, "")
+        # remove {img}
         img = img.replace("{img ", "").replace("}", "").strip()
-        tweet = tweet.replace("{img " + img + "}", "")
-        if img not in mediaIDs:
-            mediaList.append(img)
-
+        # add to mediaList
+        mediaList.append(img)
+        
     for video in re.findall(r"{vid \S+}", tweet):
+        # remove {vid \S+}
+        tweet = tweet.replace(video, "")
+        # remove {vid}
         video = video.replace("{vid ", "").replace("}", "").strip()
-        tweet = tweet.replace("{vid " + video + "}", "")
-        if video not in mediaIDs:
-            mediaList.append(video)
+        # add to mediaList
+        mediaList.append(video)
+        
 
     for num in re.findall(r"{rand \d+, \d+}", tweet):
         num = num.replace("{rand ", "").replace("}", "").strip()
         num1, num2 = num.split(",")
         tweet = tweet.replace("{rand " + num + "}", str(random.randint(int(num1), int(num2))))
 
+    # arg 1: rule, arg 2: amount to generate from JsonSource, e.g. {StoreVariable, random thank you!, 3}
+    for store in re.findall(r"{StoreVariable, [a-zA-Z0-9 ]+!, \d+}", tweet):
+        bs = store
+        store = store.replace("{StoreVariable, ", "").replace("}", "").strip()
+        rule, amount = store.split(", ")
+        if rule not in ENVIROMENT:
+            ENVIROMENT[rule] = []
+        for i in range(int(amount)):
+            ENVIROMENT[rule].append(JsonSource.GetRule(f"#{rule}#"))
+            
+        tweet = tweet.replace(bs, "")
+            
+        #print("Stored " + str(amount) + " " + rule + "s", ENVIROMENT)
+
+    # GetVariable, arg 1: rule, arg 2: index of variable, e.g. {GetVariable, thank you!, 0}
+    for get in re.findall(r"{GetVariable, [a-zA-Z0-9 ]+!, \d+}", tweet):
+        bg = get
+        get = get.replace("{GetVariable, ", "").replace("}", "").strip()
+        rule, index = get.split(", ")
+        tweet = tweet.replace(bg, ENVIROMENT[rule][int(index)])
+
+        #print("Got " + rule + " at index " + index, ENVIROMENT)
+
     for media in mediaList:
         mediaIDs.append(UploadMedia(media))
 
-    """ if len(mediaIDs) > 0:
+    if len(mediaIDs) > 0:
         Client.create_tweet(text=tweet, media_ids=mediaIDs)
     else:
-        Client.create_tweet(text=tweet) """
+        Client.create_tweet(text=tweet)
 
     print("Tweeted: " + tweet)
 
