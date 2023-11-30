@@ -64,7 +64,7 @@ class Tracery():
             print("Error loading file: " + rules + "\nTry checking https://jsonlint.com/ to find your problem.")
             sys.exit(1)
 
-    def ParseTraceryString(self, rule):
+    def ParseTraceryString(self, rule, isStored=False, isStoredBoolean=False):
         """# can include .lower/capitalize
         rulemod = rule.split(".")
         rule = rulemod[0]
@@ -97,12 +97,20 @@ class Tracery():
             elif "ed" in modifiers:
                 choice = Mod_Ed(choice)"""
             # TODO: Figure out why this doesn't work
-            rule = rule.replace(match.group(0), self.ParseTraceryString(choice))
+
+            rule = rule.replace(match.group(0), self.ParseTraceryString(choice, isStored=isStored, isStoredBoolean=isStoredBoolean))
+
+            if isStored and not isStoredBoolean: # if the rule is stored, add it to the enviroment, remove img/vid
+                # remove the {img, {vid, etc. from the rule
+                for img in re.findall(r"{img \S+}", rule):
+                    rule = rule.replace(img, "")
+                for vid in re.findall(r"{vid \S+}", rule):
+                    rule = rule.replace(vid, "")
             
         return rule
     
     def GetMainRule(self):
         return self.ParseTraceryString("#origin#")
     
-    def GetRule(self, rule):
-        return self.ParseTraceryString(rule)
+    def GetRule(self, rule, isStored=False, isStoredBoolean=False):
+        return self.ParseTraceryString(rule, isStored=isStored, isStoredBoolean=isStoredBoolean)

@@ -11,6 +11,10 @@ Because of the recent suspension of CBDQ API Access, I am making a script that c
 - download all libs needed: `pip install tweepy` and `pip install Pillow`
 - Put your bot.json in `src/` and run the script!
 
+- Libraries used:
+    - tweepy
+    - python-dotenv
+
 - Note: Not all CBDQ functions are added yet! Please request more features! (Will need an example on how it works so i can implement it)
 
 ### The [tracery](src/tracery.py) class is free for use. You may use it if you wish 🙂

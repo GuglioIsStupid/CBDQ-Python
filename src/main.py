@@ -96,15 +96,15 @@ def GenerateTweet():
         num1, num2 = num.split(",")
         tweet = tweet.replace("{rand " + num + "}", str(random.randint(int(num1), int(num2))))
 
-    # arg 1: rule, arg 2: amount to generate from JsonSource, e.g. {StoreVariable, random thank you!, 3}
-    for store in re.findall(r"{StoreVariable, [a-zA-Z0-9 ]+!, \d+}", tweet):
+    # arg 1: rule, arg 2: amount to generate from JsonSource, e.g. {StoreVariable, random thank you!, 3, bool}
+    for store in re.findall(r"{StoreVariable, [a-zA-Z0-9 ]+!, \d+, \w+}", tweet):
         bs = store
         store = store.replace("{StoreVariable, ", "").replace("}", "").strip()
-        rule, amount = store.split(", ")
+        rule, amount, boolean = store.split(", ")
         if rule not in ENVIROMENT:
             ENVIROMENT[rule] = []
         for i in range(int(amount)):
-            ENVIROMENT[rule].append(JsonSource.GetRule(f"#{rule}#"))
+            ENVIROMENT[rule].append(JsonSource.GetRule(f"#{rule}#", isStored=True, isStoredBoolean=(boolean.lower() == "true")))
             
         tweet = tweet.replace(bs, "")
             
@@ -122,10 +122,10 @@ def GenerateTweet():
     for media in mediaList:
         mediaIDs.append(UploadMedia(media))
 
-    if len(mediaIDs) > 0:
+    """if len(mediaIDs) > 0:
         Client.create_tweet(text=tweet, media_ids=mediaIDs)
     else:
-        Client.create_tweet(text=tweet)
+        Client.create_tweet(text=tweet)"""
 
     print("Tweeted: " + tweet)
 

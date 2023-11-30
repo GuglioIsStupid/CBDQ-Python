@@ -1,20 +1,20 @@
 {
     "origin": [
-        "{StoreVariable, random thank you!, 3}asdlkjaskldj, {GetVariable, random thank you!, 0}"
+        "{StoreVariable, random thank you!, 3, false}asdlkjaskldj, {GetVariable, random thank you!, 0}"
     ],
 
     "origin_1": ["You have just created your first Twitter Bot! #random thank you!# {img https://media.discordapp.net/attachments/783856131189112842/1176759195131985970/F_c_l0UWAAAu1An.jpg}"],
 
     "random thank you!": [
-        "1",
-        "2",
-        "3",
-        "4",
-        "5",
-        "6",
-        "7",
-        "8",
-        "9",
-        "10"
+        "1 {img https://media.discordapp.net/attachments/783856131189112842/1176759195131985970/F_c_l0UWAAAu1An.jpg}",
+        "2{img https://media.discordapp.net/attachments/783856131189112842/1176759195131985970/F_c_l0UWAAAu1An.jpg}",
+        "3{img https://media.discordapp.net/attachments/783856131189112842/1176759195131985970/F_c_l0UWAAAu1An.jpg}",
+        "4{img https://media.discordapp.net/attachments/783856131189112842/1176759195131985970/F_c_l0UWAAAu1An.jpg}",
+        "5{img https://media.discordapp.net/attachments/783856131189112842/1176759195131985970/F_c_l0UWAAAu1An.jpg}",
+        "6{img https://media.discordapp.net/attachments/783856131189112842/1176759195131985970/F_c_l0UWAAAu1An.jpg}",
+        "7{img https://media.discordapp.net/attachments/783856131189112842/1176759195131985970/F_c_l0UWAAAu1An.jpg}",
+        "8{img https://media.discordapp.net/attachments/783856131189112842/1176759195131985970/F_c_l0UWAAAu1An.jpg}",
+        "9{img https://media.discordapp.net/attachments/783856131189112842/1176759195131985970/F_c_l0UWAAAu1An.jpg}",
+        "10{img https://media.discordapp.net/attachments/783856131189112842/1176759195131985970/F_c_l0UWAAAu1An.jpg}"
     ]
 }
