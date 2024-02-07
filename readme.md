@@ -1,3 +1,5 @@
+# No longer updated as of : 2024/02/07. Replaced with [AGORI Bots](https://bots.agori.dev)
+
 # CheapBotsDoneQuick-like python bot for Twitter
 
 ## Why? 
